@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cloud File Share</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand" aria-label="Site brand">
+        <div class="brand-mark" aria-hidden="true">☁️</div>
+        <div class="brand-text">
+          <div class="brand-name">CloudShare</div>
+          <div class="brand-sub">Upload & Download</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="nav-link" href="#home">Home</a>
+        <a class="nav-link" href="#upload">Upload Files</a>
+        <a class="nav-link" href="#downloads">Download Files</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="themeToggle" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <span aria-hidden="true">🌓</span>
+        </button>
+
+        <button id="mobileMenuBtn" class="icon-btn mobile-only" type="button" aria-label="Open menu" title="Menu">
+          <span aria-hidden="true">☰</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobileMenu" class="mobile-menu" hidden>
+      <a class="nav-link" href="#home" data-mobile-close>Home</a>
+      <a class="nav-link" href="#upload" data-mobile-close>Upload Files</a>
+      <a class="nav-link" href="#downloads" data-mobile-close>Download Files</a>
+      <a class="nav-link" href="#contact" data-mobile-close>Contact</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 class="hero-title">Store, share, and download files like a modern cloud.</h1>
+          <p class="hero-text">
+            Drag-and-drop uploads, track progress, search and filter downloads—then manage files with delete, stats, and recent activity.
+          </p>
+
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#upload">Upload Files</a>
+            <a class="btn btn-ghost" href="#downloads">Browse Downloads</a>
+          </div>
+
+          <div class="hero-stats" role="list">
+            <div class="stat-card" role="listitem">
+              <div class="stat-value" id="statTotalFiles">0</div>
+              <div class="stat-label">Total files</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value" id="statTotalDownloads">0</div>
+              <div class="stat-label">Total downloads</div>
+            </div>
+            <div class="stat-card" role="listitem">
+              <div class="stat-value" id="statStorage">0 MB</div>
+              <div class="stat-label">Storage used</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="glow" aria-hidden="true"></div>
+          <div class="device-card">
+            <div class="device-header">
+              <div class="dot dot-red"></div>
+              <div class="dot dot-yellow"></div>
+              <div class="dot dot-green"></div>
+              <span class="device-title">Your files</span>
+            </div>
+            <div class="device-list" id="recentUploadsPreview"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPLOAD + DASHBOARD -->
+    <section class="section">
+      <div class="container grid-2">
+        <div class="card">
+          <div class="section-header" id="upload">
+            <div>
+              <h2 class="section-title">Upload Files</h2>
+              <p class="section-sub">Drag files here or pick them. Multiple files supported.</p>
+            </div>
+          </div>
+
+          <div class="upload-panel">
+            <div
+              id="dropzone"
+              class="dropzone"
+              role="button"
+              tabindex="0"
+              aria-label="Drag and drop files here"
+            >
+              <div class="dropzone-icon" aria-hidden="true">⬆️</div>
+              <div class="dropzone-text">
+                <div class="dropzone-title">Drop files to upload</div>
+                <div class="dropzone-hint">
+                  Up to <strong id="maxSizeLabel">5 MB</strong>. Allowed: <span id="allowedTypesLabel">images, docs, pdf, text, archives</span>.
+                </div>
+              </div>
+              <div class="dropzone-actions">
+                <label class="btn btn-primary" for="filePicker">Select files</label>
+                <input id="filePicker" type="file" multiple hidden />
+              </div>
+            </div>
+
+            <div class="upload-meta">
+              <div class="pill" aria-label="Validation info">Frontend-only demo (simulated upload)</div>
+              <div class="pill" id="contentNote">Small files can be downloaded; larger files require a backend.</div>
+            </div>
+
+            <div class="upload-list" aria-live="polite" id="selectedFilesList"></div>
+
+            <div class="upload-footer">
+              <button id="startUploadBtn" class="btn btn-primary" type="button">Start Upload</button>
+              <button id="clearSelectionBtn" class="btn btn-ghost" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="card dashboard" aria-label="Dashboard">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Dashboard</h2>
+              <p class="section-sub">Live totals based on your local uploads.</p>
+            </div>
+          </div>
+
+          <div class="dash-metrics">
+            <div class="metric">
+              <div class="metric-label">Total files uploaded</div>
+              <div class="metric-value" id="dashTotalUploads">0</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Total downloads</div>
+              <div class="metric-value" id="dashTotalDownloads">0</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Storage usage</div>
+              <div class="metric-value" id="dashStorageUsage">0 MB</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="recent">
+            <div class="recent-title">Recent uploads</div>
+            <div class="recent-list" id="recentUploads"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="hint-box" role="note">
+            <div class="hint-title">Backend-ready structure</div>
+            <div class="hint-text">
+              This UI stores metadata in <code>localStorage</code>. When you add a server later, wire the upload/download buttons to your endpoints.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- DOWNLOADS -->
+    <section class="section">
+      <div class="container">
+        <div class="download-header" id="downloads">
+          <div>
+            <h2 class="section-title">Download Files</h2>
+            <p class="section-sub">Search, filter, paginate, download, or delete.</p>
+          </div>
+        </div>
+
+        <div class="toolbar card">
+          <div class="toolbar-left">
+            <div class="field">
+              <label class="label" for="searchInput">Search</label>
+              <input id="searchInput" type="search" placeholder="Search by file name" autocomplete="off" />
+            </div>
+
+            <div class="field">
+              <label class="label" for="typeFilter">Type</label>
+              <select id="typeFilter">
+                <option value="all">All</option>
+                <option value="images">Images</option>
+                <option value="documents">Documents</option>
+                <option value="pdf">PDF</option>
+                <option value="text">Text</option>
+                <option value="archives">Archives</option>
+                <option value="videos">Videos</option>
+                <option value="audio">Audio</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <button id="resetFiltersBtn" class="btn btn-ghost" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="downloads-status" id="downloadsStatus" aria-live="polite"></div>
+
+        <div class="cards-grid" id="filesGrid" aria-live="polite"></div>
+
+        <div class="pagination" aria-label="Pagination">
+          <button id="prevPageBtn" class="btn btn-ghost" type="button">Prev</button>
+          <div class="pagination-info" id="paginationInfo">Page 1</div>
+          <button id="nextPageBtn" class="btn btn-ghost" type="button">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="contact card">
+          <h2 class="section-title">Contact</h2>
+          <p class="section-sub">This is a frontend demo UI. To connect real uploading/downloading, plug in your backend later.</p>
+          <div class="contact-actions">
+            <a class="btn btn-primary" href="#upload">Try Uploading</a>
+            <button class="btn btn-ghost" type="button" id="loadMockBtn">Load Mock Data</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-relevant="additions"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
